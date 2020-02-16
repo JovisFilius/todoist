@@ -39,7 +39,7 @@ func GetClient(c *cli.Context) *todoist.Client {
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "todoist"
+	app.Name = "todoist (patched ByJovis)"
 	app.Usage = "Todoist CLI Client"
 	app.Version = "0.15.0"
 
