@@ -112,6 +112,9 @@ func (item Item) DateTime() time.Time {
 	if err != nil {
 		t, _ = time.ParseInLocation(RFC3339Date, date, time.Local)
 	}
+        if date != "" && t.Hour() == 0 && t.Minute() == 0 {
+                t = t.Add((23*3600+59*60)*1000000000)
+        }
 	return t
 }
 
