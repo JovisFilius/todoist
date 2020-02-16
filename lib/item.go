@@ -8,12 +8,14 @@ import (
 )
 
 var (
-	linkRegex = regexp.MustCompile(`\[(.*)\]\((.*)\)`)
+	//linkRegex = regexp.MustCompile(`\[(.*)\]\((.*)\)`)
+	linkRegex = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
 )
 
 const (
-	RFC3339Date = "2006-01-02"
-	RFC3339DateTime = "2006-01-02T15:04:05"
+	RFC3339Date =                 "2006-01-02"
+	RFC3339DateTime =             "2006-01-02T15:04:05"
+  RFC3339DateTimeWithTimeZone = "2006-01-02T15:04:05Z07:00"
 )
 
 type Due struct {
@@ -101,7 +103,12 @@ func (item Item) DateTime() time.Time {
 		date = item.Due.Date
 	}
 
-	t, err := time.ParseInLocation(RFC3339DateTime, date, time.Local)
+  //2020-03-03T14:00:00
+	//2020-01-17T23:00:00Z
+	t, err := time.ParseInLocation(RFC3339DateTimeWithTimeZone, date, time.Local)
+	if err != nil {
+		t, err = time.ParseInLocation(RFC3339DateTime, date, time.Local)
+	}
 	if err != nil {
 		t, _ = time.ParseInLocation(RFC3339Date, date, time.Local)
 	}
@@ -127,11 +134,20 @@ func GetContentTitle(item ContentCarrier) string {
 	return linkRegex.ReplaceAllString(item.GetContent(), "$1")
 }
 
-func GetContentURL(item ContentCarrier) string {
+func GetContentURL(item ContentCarrier) []string {
 	if HasURL(item) {
-		return linkRegex.ReplaceAllString(item.GetContent(), "$2")
+		//return linkRegex.ReplaceAllString(item.GetContent(), "$2")
+        matches := linkRegex.FindAllStringSubmatch(item.GetContent(), -1)
+        if matches != nil {
+            urls := make([]string, len(matches))
+            for i, match := range matches {
+                urls[i] = match[2]
+            }
+            return urls
+        }
 	}
-	return ""
+	//return ""
+    return []string{}
 }
 
 func HasURL(item ContentCarrier) bool {
