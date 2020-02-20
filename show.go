@@ -2,7 +2,7 @@ package main
 
 import (
 	"strconv"
-    "strings"
+	"strings"
 
 	"github.com/pkg/browser"
 	"github.com/sachaos/todoist/lib"
@@ -36,8 +36,7 @@ func Show(c *cli.Context) error {
 		[]string{"Labels", item.LabelsString(client.Store)},
 		[]string{"Priority", PriorityFormat(item.Priority)},
 		[]string{"DueDate", DueDateFormat(item.DateTime(), item.AllDay)},
-        []string{"URL", strings.Join(todoist.GetContentURL(item), ",")},
-		//[]string{"URL", todoist.GetContentURL(item)},
+		[]string{"URL", strings.Join(todoist.GetContentURL(item), ",")},
 	}
 	defer writer.Flush()
 
@@ -47,10 +46,9 @@ func Show(c *cli.Context) error {
 
 	if todoist.HasURL(item) {
 		if c.Bool("browse") {
-		//	browser.OpenURL(todoist.GetContentURL(item))
-            for _, url := range todoist.GetContentURL(item) {
-                browser.OpenURL(url)
-            }
+			for _, url := range todoist.GetContentURL(item) {
+				browser.OpenURL(url)
+			}
 		}
 	}
 	return nil
