@@ -8,7 +8,6 @@ import (
 )
 
 var (
-	//linkRegex = regexp.MustCompile(`\[(.*)\]\((.*)\)`)
 	linkRegex = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
 )
 
@@ -103,7 +102,7 @@ func (item Item) DateTime() time.Time {
 		date = item.Due.Date
 	}
 
-  //2020-03-03T14:00:00
+        //2020-03-03T14:00:00
 	//2020-01-17T23:00:00Z
 	t, err := time.ParseInLocation(RFC3339DateTimeWithTimeZone, date, time.Local)
 	if err != nil {
@@ -139,7 +138,6 @@ func GetContentTitle(item ContentCarrier) string {
 
 func GetContentURL(item ContentCarrier) []string {
 	if HasURL(item) {
-		//return linkRegex.ReplaceAllString(item.GetContent(), "$2")
         matches := linkRegex.FindAllStringSubmatch(item.GetContent(), -1)
         if matches != nil {
             urls := make([]string, len(matches))
@@ -149,7 +147,6 @@ func GetContentURL(item ContentCarrier) []string {
             return urls
         }
 	}
-	//return ""
     return []string{}
 }
 
